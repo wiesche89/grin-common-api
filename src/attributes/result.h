@@ -1,6 +1,7 @@
 #ifndef RESULT_H
 #define RESULT_H
 
+#include <QDebug>
 #include "error.h"
 
 template<typename T>
@@ -8,8 +9,32 @@ class Result
 {
 public:
     /**
-     * @brief Result
-     * @param value
+     * @brief Statische Hilfsmethoden für kompaktere Nutzung
+     */
+    static Result<T> ok(const T &value)
+    {
+        return Result<T>(value);
+    }
+
+    bool ok() const
+    {
+        return !m_hasError;
+    }
+
+    static Result<T> error(const QString &message)
+    {
+        Error e;
+        e.message = message;
+        return Result<T>(e);
+    }
+
+    static Result<T> error(const Error &err)
+    {
+        return Result<T>(err);
+    }
+
+    /**
+     * @brief Result mit Wert
      */
     Result(const T &value) :
         m_value(value),
@@ -18,8 +43,7 @@ public:
     }
 
     /**
-     * @brief Result
-     * @param error
+     * @brief Result mit Fehler
      */
     Result(const Error &error) :
         m_error(error),
@@ -28,8 +52,7 @@ public:
     }
 
     /**
-     * @brief hasError
-     * @return
+     * @brief Gibt true zurück, wenn ein Fehler vorhanden ist.
      */
     bool hasError() const
     {
@@ -37,8 +60,7 @@ public:
     }
 
     /**
-     * @brief error
-     * @return
+     * @brief Gibt den Fehler zurück.
      */
     Error error() const
     {
@@ -46,8 +68,7 @@ public:
     }
 
     /**
-     * @brief value
-     * @return
+     * @brief Gibt den Wert zurück.
      */
     T value() const
     {
@@ -55,15 +76,12 @@ public:
     }
 
     /**
-     * @brief unwrapOrLog
-     * @param out
-     * @return
+     * @brief Gibt den Wert aus oder loggt den Fehler.
      */
     bool unwrapOrLog(T &out) const
     {
         if (m_hasError) {
-            QString msg = m_error.message;
-            qDebug() << "Error:" << msg;
+            qDebug() << "Error:" << m_error.message;
             return false;
         }
         out = m_value;
@@ -71,19 +89,17 @@ public:
     }
 
     /**
-     * @brief errorMessage
-     * @return
+     * @brief Gibt die Fehlermeldung als QString zurück.
      */
     QString errorMessage() const
     {
-        QString msg = m_error.message;
-        return m_hasError ? msg : QString();
+        return m_hasError ? m_error.message : QString();
     }
 
 private:
     T m_value{};
     Error m_error;
-    bool m_hasError;
+    bool m_hasError{false};
 };
 
 #endif // RESULT_H
