@@ -8,6 +8,14 @@ template<typename T>
 class Result
 {
 public:
+
+    Result()
+        : m_value()
+        , m_error()
+        , m_hasError(false)
+    {
+    }
+
     /**
      * @brief Statische Hilfsmethoden für kompaktere Nutzung
      */
