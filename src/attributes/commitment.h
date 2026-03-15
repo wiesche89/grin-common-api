@@ -13,6 +13,7 @@ class Commitment
     Q_GADGET
     // Expose the data property to Qt's meta-object system
     Q_PROPERTY(QByteArray data READ data WRITE setData)
+    Q_PROPERTY(QString hex READ hex WRITE setHex)
 
 public:
     Commitment();
@@ -20,9 +21,11 @@ public:
 
     // Getter
     QByteArray data() const;
+    QString hex() const;
 
     // Setter
     void setData(const QByteArray &data);
+    void setHex(const QString &hex);
 
     // JSON serialization / deserialization
     void fromJson(const QJsonObject &json);

@@ -30,6 +30,11 @@ QByteArray Commitment::data() const
     return m_data;
 }
 
+QString Commitment::hex() const
+{
+    return QString::fromUtf8(m_data.toHex());
+}
+
 /**
  * @brief Commitment::setData
  * @param data
@@ -38,6 +43,16 @@ void Commitment::setData(const QByteArray &data)
 {
     if (data.size() == 33) {
         m_data = data;
+    }
+}
+
+void Commitment::setHex(const QString &hex)
+{
+    const QByteArray decoded = QByteArray::fromHex(hex.toUtf8());
+    if (decoded.size() == 33) {
+        m_data = decoded;
+    } else {
+        m_data = QByteArray(33, 0);
     }
 }
 
