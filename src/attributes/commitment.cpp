@@ -85,5 +85,6 @@ QJsonObject Commitment::toJson() const
 {
     QJsonObject json;
     json["commitment"] = QString::fromUtf8(m_data.toBase64());
+    json["hex"] = hex();
     return json;
 }
