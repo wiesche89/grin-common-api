@@ -38,8 +38,20 @@ QJsonObject Output::toJson() const
  */
 Output Output::fromJson(const QJsonObject &obj)
 {
+    // Convert features to proper string format ("Plain" or "Coinbase")
+    QString featureName;
+    if (obj["features"].isString()) {
+        featureName = obj["features"].toString();
+    } else if (obj["features"].isDouble()) {
+        // Convert integer to feature name
+        int featureInt = obj["features"].toInt();
+        featureName = (featureInt == 1) ? QStringLiteral("Coinbase") : QStringLiteral("Plain");
+    } else {
+        featureName = QStringLiteral("Plain");  // Default
+    }
+    
     return Output(obj["commit"].toString(),
-                  obj["features"].toString(),
+                  featureName,
                   obj["proof"].toString());
 }
 
