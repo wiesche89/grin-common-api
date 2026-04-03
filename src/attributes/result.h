@@ -1,7 +1,6 @@
 #ifndef RESULT_H
 #define RESULT_H
 
-#include <QDebug>
 #include "error.h"
 
 template<typename T>
@@ -89,7 +88,6 @@ public:
     bool unwrapOrLog(T &out) const
     {
         if (m_hasError) {
-            qDebug() << "Error:" << m_error.message;
             return false;
         }
         out = m_value;
